@@ -34,7 +34,7 @@ async def get_app():
         pg_pool = await pool.create_pool(config.POSTGRE_DSN)  # создаем пулл подключений
         app['pg_pool'] = pg_pool  # заисываем в контекст приложения
         yield
-        await pg_pool.close()  # когда приложение завершит работу, пул закроется
+        pg_pool.close()  # когда приложение завершит работу, пул закроется
 
 
     # теперь регистрируем
@@ -90,7 +90,7 @@ async def get_app():
 
         app['pg_engine'] = engine
         yield
-        await engine.close()
+        engine.close()
 
     app.cleanup_ctx.append(partial(register_connection_alchemy))
 
