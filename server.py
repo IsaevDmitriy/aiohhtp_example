@@ -103,6 +103,7 @@ class Users(web.View):
                 users = await cursor.fetchall()
                 return web.json_response(users)
 
+
 app = web.Application()
 app.cleanup_ctx.append(orm_engine)
 app.cleanup_ctx.append(pg_pool)

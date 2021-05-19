@@ -17,4 +17,4 @@ def get_users():
     print(response.text)
 
 
-get_users()
+get_user()
