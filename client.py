@@ -1,19 +1,22 @@
-import requests
+import aiohttp
+import asyncio
+from async_decor import print_decor
+
+HOST = 'http://0.0.0.0:8080'
 
 
-def create_user():
-    response = requests.post('http://127.0.0.1:8089/user', json={'username': 'kirill2', 'password': '1234', 'name': 'kirill2'})
-    data = response.json()
-    print(data)
-
-def get_user():
-    response = requests.get('http://127.0.0.1:8089/user/1')
-    print(response.text)
-
-
-def get_users():
-    response = requests.get('http://127.0.0.1:8089/users')
-    print(response.text)
+@print_decor
+async def make_request(path, method='get', **kwargs):
+    async with aiohttp.ClientSession() as session:
+        request_method = getattr(session, method)
+        async with request_method(f'{HOST}/{path}', **kwargs) as response:
+            print(response.status)
+            return (await response.text())
 
 
-get_users()
+async def main():
+    response = await make_request('user', 'post', json={'username': 'nikitos4', 'password': '1234'})
+    await make_request('user/2', 'get')
+
+
+asyncio.run(main())
